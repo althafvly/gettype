@@ -8,7 +8,14 @@
 
 #include <iostream>
 #include <cstdlib>
+#ifdef _WIN32
+struct iovec {
+    void *iov_base;
+    size_t iov_len;
+};
+#else
 #include <sys/uio.h>
+#endif
 #include <cstdio>
 #include <memory>
 #include <unistd.h>

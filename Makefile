@@ -13,14 +13,23 @@ CXXFLAGS += -static
 LDFLAGS  += -static
 endif
 
+EXE :=
+CHMOD := chmod +x
+ifneq (,$(findstring mingw,$(CXX)))
+    EXE := .exe
+    CHMOD := true
+endif
+
+TARGET := gettype$(EXE)
+
 .PHONY: all clean
 
-all: gettype
+all: $(TARGET)
 
-gettype: gettype.cpp libfmt.a
+$(TARGET): gettype.cpp libfmt.a
 	@echo "    GEN   $@"
 	@$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
-	@chmod +x $@
+	@$(CHMOD) $@
 	@echo "    STRIP $@"
 	@$(STRIP) $@
 
@@ -38,4 +47,4 @@ getfmt.o: getfmt.cpp
 
 clean:
 	@echo "    CLEAN"
-	@rm -f *.o *.a gettype
+	@rm -f *.o *.a gettype gettype.exe
